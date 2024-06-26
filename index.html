@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI QnA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .response {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f1f1f1;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tanya AI</h1>
+        <p>Masukkan pertanyaan kamu dibawah ini:</p>
+        <input type="text" id="question" placeholder="Tanyakan sesuatu...">
+        <button onclick="askAI()">Tanya AI</button>
+        <div id="response" class="response"></div>
+    </div>
+    
+    <script>
+        async function askAI() {
+            const question = document.getElementById("question").value;
+            const responseDiv = document.getElementById("response");
+
+            try {
+                const response = await fetch('/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    responseDiv.innerText = "Error: " + data.error;
+                } else {
+                    responseDiv.innerText = data.answer;
+                }
+            } catch (error) {
+                responseDiv.innerText = "Error: " + error.message;
+            }
+        }
+    </script>
+</body>
+  </html>
